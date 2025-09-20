@@ -1,106 +1,312 @@
 # Virtual ECU Multi-Container Cluster: Execution Roadmap
 
 ## Project Overview
-Build a realistic automotive Software-Defined Vehicle (SDV) development environment using containers that simulate real automotive HPC architecture with native applications and authentic inter-domain communication.
+Build a realistic automotive Software-Defined Vehicle (SDV) development environment using dev containers that simulate real automotive HPC architecture with native applications and authentic inter-domain communication.
 
 ## Architecture Summary
-- **Container 1**: Ubuntu x86_64 → Native automotive middleware applications
-- **Container 2**: Ubuntu x86_64 → Android Automotive emulator/simulator  
-- **Container 3**: Ubuntu x86_64 → FreeRTOS simulator
+- **Dev Container 1**: Ubuntu x86_64 → Native automotive middleware applications
+- **Dev Container 2**: Ubuntu x86_64 → Android Automotive emulator/simulator  
+- **Dev Container 3**: Ubuntu x86_64 → FreeRTOS simulator
 - **Communication**: Virtual CAN, Ethernet/IP, Shared Memory, Message Queues
+- **Development**: VS Code Dev Containers with domain-specific tooling
 
 ---
 
-## Phase 1: Container Infrastructure Setup
+## Phase 1: Dev Container Infrastructure Setup
 
 ### Objective
-Establish reliable multi-container development environment with verified inter-container communication.
+Establish reliable multi-dev-container development environment with VS Code integration and verified inter-container communication.
 
-### Container 1: Ubuntu Linux Domain
+### Project Structure Setup
+```
+vecu_cluster/
+├── .devcontainer/
+│   ├── ubuntu/
+│   │   ├── devcontainer.json
+│   │   ├── Dockerfile
+│   │   └── scripts/
+│   ├── android/
+│   │   ├── devcontainer.json
+│   │   ├── Dockerfile
+│   │   └── scripts/
+│   └── freertos/
+│       ├── devcontainer.json
+│       ├── Dockerfile
+│       └── scripts/
+├── ubuntu-domain/
+│   ├── src/
+│   ├── services/
+│   └── CMakeLists.txt
+├── android-domain/
+│   ├── app/
+│   ├── src/
+│   └── build.gradle
+├── freertos-domain/
+│   ├── src/
+│   ├── tasks/
+│   └── FreeRTOSConfig.h
+├── docker-compose.yml
+├── scripts/
+└── docs/
+```
+
+### Dev Container 1: Ubuntu Linux Domain
 **Purpose**: Automotive middleware and services platform
 
+#### Dev Container Configuration:
+```json
+// .devcontainer/ubuntu/devcontainer.json
+{
+    "name": "Ubuntu Automotive Middleware",
+    "dockerFile": "Dockerfile",
+    "mounts": [
+        "source=${localWorkspaceFolder}/ubuntu-domain,target=/workspace,type=bind",
+        "source=${localWorkspaceFolder}/scripts,target=/scripts,type=bind"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "ms-vscode.makefile-tools",
+                "ms-python.python",
+                "redhat.vscode-yaml"
+            ],
+            "settings": {
+                "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+                "cmake.configureOnOpen": true
+            }
+        }
+    },
+    "postCreateCommand": "bash /scripts/setup-ubuntu-dev.sh",
+    "remoteUser": "vscode"
+}
+```
+
 #### Infrastructure Tasks:
-- Create Ubuntu 22.04 x86_64 base container
+- Create Ubuntu 22.04 x86_64 dev container with Dockerfile
 - Install development toolchain (GCC, CMake, build-essential)
 - Configure debugging tools (GDB, Valgrind, strace)
 - Set up systemd service management
-- Install network utilities and CAN tools
+- Install network utilities and CAN tools (can-utils, iproute2)
+- Configure VS Code C/C++ development environment
 
 #### Verification:
-- Container boots reliably and consistently
-- All development tools functional
+- Dev container opens successfully in VS Code
+- All development tools functional within VS Code
+- C/C++ IntelliSense and debugging working
 - systemd services can be created and managed
 - Network connectivity established
 
-### Container 2: Android Automotive Domain
+### Dev Container 2: Android Automotive Domain
 **Purpose**: Infotainment and user interface platform
+
+#### Dev Container Configuration:
+```json
+// .devcontainer/android/devcontainer.json
+{
+    "name": "Android Automotive Development",
+    "dockerFile": "Dockerfile",
+    "mounts": [
+        "source=${localWorkspaceFolder}/android-domain,target=/workspace,type=bind",
+        "source=${localWorkspaceFolder}/scripts,target=/scripts,type=bind"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vscjava.vscode-java-pack",
+                "redhat.java",
+                "vscjava.vscode-gradle",
+                "ms-python.python"
+            ],
+            "settings": {
+                "java.home": "/usr/lib/jvm/java-17-openjdk-amd64"
+            }
+        }
+    },
+    "postCreateCommand": "bash /scripts/setup-android-dev.sh",
+    "remoteUser": "vscode",
+    "forwardPorts": [5554, 5555]
+}
+```
 
 #### Infrastructure Tasks:
 - Install Android SDK and command-line tools
 - Download Android Automotive OS (AAOS) system images
 - Configure Android emulator for x86_64
 - Set up X11 forwarding or VNC for GUI display
-- Test APK installation and basic Android functionality
+- Install Java development environment
+- Configure VS Code Android development extensions
 
 #### Verification:
+- Dev container opens successfully with Android tooling
+- Android SDK and emulator accessible
 - Android Automotive emulator boots successfully
 - GUI accessible through host system
-- APK installation and execution working
-- Android services responding correctly
+- APK build and installation working
+- Java IntelliSense functioning
 
-### Container 3: FreeRTOS Domain
+### Dev Container 3: FreeRTOS Domain
 **Purpose**: Real-time and safety-critical applications platform
+
+#### Dev Container Configuration:
+```json
+// .devcontainer/freertos/devcontainer.json
+{
+    "name": "FreeRTOS Real-Time Development",
+    "dockerFile": "Dockerfile",
+    "mounts": [
+        "source=${localWorkspaceFolder}/freertos-domain,target=/workspace,type=bind",
+        "source=${localWorkspaceFolder}/scripts,target=/scripts,type=bind"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "webfreak.debug",
+                "ms-vscode.hexeditor"
+            ],
+            "settings": {
+                "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+                "C_Cpp.default.cStandard": "c11"
+            }
+        }
+    },
+    "postCreateCommand": "bash /scripts/setup-freertos-dev.sh",
+    "remoteUser": "vscode"
+}
+```
 
 #### Infrastructure Tasks:
 - Install FreeRTOS POSIX simulator
 - Configure FreeRTOS build environment
 - Set up real-time task scheduling framework
 - Install timing analysis and debugging tools
-- Create basic task creation and management
+- Configure ARM cross-compilation toolchain
+- Set up VS Code embedded development environment
 
 #### Verification:
-- FreeRTOS simulator runs without crashes
+- Dev container opens with FreeRTOS tooling
+- FreeRTOS simulator compiles and runs
 - Tasks can be created and scheduled
-- Basic real-time constraints demonstrable
-- Inter-task communication working
+- VS Code debugging integration working
+- Real-time analysis tools functional
 
 ### Communication Infrastructure
 #### Network Setup:
-- Configure Docker custom bridge networks
-- Assign static IP addresses to containers
-- Set up virtual CAN bus interfaces
-- Test basic container-to-container connectivity
+- Configure Docker custom bridge networks in docker-compose.yml
+- Assign static IP addresses to dev containers
+- Set up virtual CAN bus interfaces across containers
+- Test basic dev container-to-container connectivity
+
+#### Docker Compose Configuration:
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  ubuntu-domain:
+    build: .devcontainer/ubuntu
+    container_name: vecu-ubuntu-dev
+    networks:
+      vecu-network:
+        ipv4_address: 172.20.0.10
+    volumes:
+      - ./ubuntu-domain:/workspace
+    tty: true
+    stdin_open: true
+    
+  android-domain:
+    build: .devcontainer/android
+    container_name: vecu-android-dev
+    networks:
+      vecu-network:
+        ipv4_address: 172.20.0.20
+    volumes:
+      - ./android-domain:/workspace
+    ports:
+      - "5554:5554"
+      - "5555:5555"
+    tty: true
+    stdin_open: true
+    
+  freertos-domain:
+    build: .devcontainer/freertos
+    container_name: vecu-freertos-dev
+    networks:
+      vecu-network:
+        ipv4_address: 172.20.0.30
+    volumes:
+      - ./freertos-domain:/workspace
+    tty: true
+    stdin_open: true
+
+networks:
+  vecu-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+```
+
+#### Development Workflow:
+1. **Open workspace in VS Code**
+2. **Choose development domain**:
+   - `Ctrl+Shift+P` → "Dev Containers: Reopen in Container"
+   - Select ubuntu/android/freertos dev container
+3. **Develop with full VS Code integration** in chosen domain
+4. **Switch dev containers** as needed for different domains
+5. **Use docker-compose up** for integration testing across containers
 
 #### Verification:
+- All dev containers accessible via VS Code
+- VS Code extensions working in each container
 - All containers can communicate via TCP/UDP
 - Virtual CAN interfaces created and accessible
 - Basic message passing between containers working
 - Network latency within acceptable limits
+- Container switching workflow smooth
 
 #### Deliverables:
-- ✅ Three stable, reliable containers
+- ✅ Three stable, reliable dev containers with VS Code integration
 - ✅ Verified inter-container communication
-- ✅ Development environment ready for applications
+- ✅ Development environment ready for domain-specific applications
 - ✅ Container restart and recovery procedures
+- ✅ Seamless development workflow across domains
 
 ---
 
 ## Phase 2: Native Application Development
 
 ### Objective
-Implement automotive-specific applications in each domain with realistic functionality.
+Implement automotive-specific applications in each dev container with realistic functionality and proper VS Code integration.
+
+### Development Workflow Enhancement
+Each domain now supports full development lifecycle within VS Code:
+- **Code editing** with IntelliSense and syntax highlighting
+- **Building** with integrated build systems
+- **Debugging** with breakpoints and variable inspection
+- **Testing** with integrated test runners
+- **Version control** with Git integration
 
 ### Ubuntu Domain Applications
 
 #### Automotive Services:
 ```c
-// Core automotive middleware services
+// Core automotive middleware services developed in Ubuntu dev container
 vehicle_state_manager     // Vehicle parameter management
 diagnostic_service        // OBD-II and diagnostic protocols  
 communication_gateway     // Inter-domain message routing
 ota_update_service       // Over-the-air update simulation
 security_manager         // Certificate and key management
 ```
+
+#### Development Environment:
+- **VS Code C/C++ extension** for code completion and debugging
+- **CMake Tools extension** for build management
+- **Integrated terminal** for running services and tests
+- **Git integration** for version control
+- **Remote debugging** capabilities for service troubleshooting
 
 #### Service Integration:
 - Systemd service files and dependencies
@@ -113,12 +319,19 @@ security_manager         // Certificate and key management
 
 #### AAOS Applications:
 ```java
-// Android Automotive native applications
+// Android Automotive applications developed in Android dev container
 NavigationApp            // GPS navigation with vehicle integration
 MediaPlayerApp           // Audio/video with vehicle state awareness  
 VehicleSettingsApp       // Vehicle configuration and preferences
 DiagnosticsApp          // Vehicle health and maintenance status
 ```
+
+#### Development Environment:
+- **Java extension pack** for Android development
+- **Gradle integration** for build management
+- **Android emulator** accessible from VS Code
+- **APK debugging** capabilities
+- **Android SDK tools** integrated
 
 #### Android Integration:
 - Car API utilization for vehicle properties
@@ -131,13 +344,20 @@ DiagnosticsApp          // Vehicle health and maintenance status
 
 #### Real-Time Tasks:
 ```c
-// Safety-critical automotive functions
+// Safety-critical automotive functions developed in FreeRTOS dev container
 engine_control_task      // Engine management (10ms cycle)
 brake_system_task        // Brake control and monitoring (5ms cycle)
 safety_monitor_task      // System safety oversight (1ms cycle)
 sensor_data_task         // Sensor data collection and processing
 actuator_control_task    // Vehicle actuator management
 ```
+
+#### Development Environment:
+- **C/C++ extension** with embedded development support
+- **ARM cross-compilation** toolchain integration
+- **Real-time debugging** with timing analysis
+- **Task scheduler visualization** tools
+- **Memory analysis** capabilities
 
 #### Real-Time Features:
 - Deterministic task scheduling
@@ -147,10 +367,12 @@ actuator_control_task    // Vehicle actuator management
 - Watchdog timer implementation
 
 #### Deliverables:
-- ✅ Functional automotive applications in each domain
+- ✅ Functional automotive applications in each dev container
+- ✅ VS Code integrated development workflow
 - ✅ Realistic automotive use case scenarios
 - ✅ Domain-specific development patterns
 - ✅ Application documentation and testing
+- ✅ Cross-container integration testing capabilities
 
 ---
 
@@ -392,18 +614,24 @@ Once the x86_64 implementation is complete and validated, migrate the entire sys
 
 ## Getting Started
 
-### Immediate Next Steps:
-1. **Create project repository** and initial directory structure
-2. **Set up development environment** with Docker and required tools
-3. **Begin Phase 1** with Ubuntu container infrastructure setup
-4. **Establish daily progress tracking** and documentation habits
-5. **Start building professional network** through content sharing
-
-### Development Environment:
+### Prerequisites:
+- **VS Code** with Dev Containers extension installed
+- **Docker Desktop** or Docker Engine with docker-compose
+- **Git** for version control
 - **Host System**: Linux (Ubuntu/Debian preferred) or WSL2
-- **Container Platform**: Docker with docker-compose
-- **Development Tools**: VS Code with container extensions
-- **Version Control**: Git with GitHub for portfolio hosting
-- **Documentation**: Markdown with GitHub Pages or similar
+
+### Immediate Next Steps:
+1. **Create project repository** and directory structure as outlined
+2. **Set up dev container configurations** for all three domains
+3. **Test VS Code dev container workflow** with each container
+4. **Verify container switching** and development experience
+5. **Establish inter-container communication** for integration testing
+
+### Development Environment Verification:
+- **VS Code opens each dev container** successfully
+- **Domain-specific extensions** load and function properly
+- **IntelliSense and debugging** work in each environment
+- **Build systems** (CMake, Gradle, FreeRTOS) functional
+- **Inter-container networking** established and tested
 
 This roadmap provides a structured, achievable path to building a comprehensive automotive SDV development environment while maximizing learning outcomes and career positioning for the semiconductor industry.
