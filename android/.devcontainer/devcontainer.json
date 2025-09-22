@@ -7,5 +7,6 @@
         "source=${localWorkspaceFolder}/apps,target=/workspace/apps,type=bind"
     ],
     "remoteUser": "vscode",
-    "forwardPorts": [5900]
+    "forwardPorts": [5900],
+    "postStartCommand": "/start-gui.sh"
 }
