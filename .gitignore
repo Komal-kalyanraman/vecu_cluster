@@ -1,0 +1,99 @@
+# === General OS files ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === VS Code ===
+.vscode/
+
+# === JetBrains IDEs ===
+.idea/
+*.iml
+
+# === Logs ===
+*.log
+
+# === Python virtual environments (if any) ===
+venv/
+.env/
+
+# === C/C++ build artifacts ===
+*.o
+*.obj
+*.elf
+*.bin
+*.map
+*.out
+*.a
+*.so
+*.exe
+*.d
+*.gcda
+*.gcno
+*.gcov
+*.swp
+*.swo
+*.pyc
+*.pyo
+*.pyd
+
+# === CMake ===
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+**/build/
+!android/apps/ledflash/gradle/wrapper/gradle-wrapper.jar
+
+# === Android/Gradle ===
+.gradle/
+local.properties
+*.apk
+*.ap_
+*.jks
+*.keystore
+.cxx/
+android/apps/ledflash/app/build/
+android/apps/ledflash/.gradle/
+android/apps/ledflash/build/
+android/apps/ledflash/app/.cxx/
+android/apps/ledflash/app/.externalNativeBuild/
+android/apps/ledflash/app/.idea/
+android/apps/ledflash/app/.DS_Store
+
+# === Android Studio ===
+*.hprof
+
+# === FreeRTOS/Embedded ===
+freertos/build/
+freertos/.vscode/
+freertos/.cproject
+freertos/.project
+freertos/.settings/
+freertos/.metadata/
+freertos/.idea/
+
+# === Ubuntu domain (if using CMake or Make) ===
+ubuntu/build/
+ubuntu/.vscode/
+ubuntu/.idea/
+ubuntu/.cproject
+ubuntu/.project
+ubuntu/.settings/
+ubuntu/.metadata/
+
+# === Docker ===
+**/tmp/
+**/.tmp/
+**/tmp/*
+**/.tmp/*
+
+# === Misc ===
+*.swp
+*.swo
+*~
+
+# === Git ===
+.git/

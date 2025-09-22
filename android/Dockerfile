@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
     libqt5gui5 \
     libqt5core5a \
     nano \
+    python3 \
+    make \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Android SDK command line tools
@@ -43,8 +45,11 @@ RUN echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd
 RUN echo 'export ANDROID_SDK_ROOT=/opt/android-sdk' >> /etc/profile.d/android.sh && \
     echo 'export PATH=$PATH:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/emulator' >> /etc/profile.d/android.sh
 
-RUN useradd -ms /bin/bash vscode
+# RUN useradd -ms /bin/bash vscode
 WORKDIR /workspace
+
+# Copy the apps folder into the container
+COPY apps /workspace/apps
 
 # Expose VNC port
 EXPOSE 5900
@@ -53,4 +58,4 @@ EXPOSE 5900
 COPY start-gui.sh /start-gui.sh
 RUN chmod +x /start-gui.sh
 
-USER vscode
+# USER vscode
