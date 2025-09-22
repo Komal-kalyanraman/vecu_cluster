@@ -1,0 +1,11 @@
+{
+    "name": "Android Dev Container",
+    "dockerFile": "Dockerfile",
+    "workspaceFolder": "/workspace",
+    "mounts": [
+        "source=${localWorkspaceFolder}/src,target=/workspace/src,type=bind",
+        "source=${localWorkspaceFolder}/apps,target=/workspace/apps,type=bind"
+    ],
+    "remoteUser": "vscode",
+    "forwardPorts": [5900]
+}

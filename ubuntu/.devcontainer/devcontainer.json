@@ -1,0 +1,10 @@
+{
+    "name": "Ubuntu Dev Container",
+    "dockerFile": "Dockerfile",
+    "workspaceFolder": "/workspace",
+    "mounts": [
+        "source=${localWorkspaceFolder}/src,target=/workspace/src,type=bind",
+        "source=${localWorkspaceFolder}/services,target=/workspace/services,type=bind"
+    ],
+    "remoteUser": "vscode"
+}
