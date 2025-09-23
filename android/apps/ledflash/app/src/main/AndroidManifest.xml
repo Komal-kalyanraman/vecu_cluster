@@ -1,10 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ledflash">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
-        android:label="LED Flash"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:label="ledflash"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.NoDisplay">
+        <service
+            android:name=".LedFlashService"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

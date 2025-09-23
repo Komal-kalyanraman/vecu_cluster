@@ -1,26 +1,20 @@
 package com.example.ledflash;
 
-import android.graphics.Color;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
-    private boolean isOn = false;
-    private View rootView;
-
+public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        rootView = findViewById(android.R.id.content);
-
-        Button btn = findViewById(R.id.flashButton);
-        btn.setOnClickListener(v -> {
-            isOn = !isOn;
-            rootView.setBackgroundColor(isOn ? Color.YELLOW : Color.BLACK);
-            btn.setText(isOn ? "Turn OFF" : "Turn ON");
-        });
+        Intent serviceIntent = new Intent(this, LedFlashService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+        finish();
     }
 }
