@@ -66,6 +66,30 @@ We chose a headless (no-GUI) Android app for this testbench because:
    ...
    ```
 
+## Optional: Viewing the Emulator via VNC (with Remmina)
+
+If you want to see the Android emulator’s screen (for debugging or visual confirmation), you can connect using the Remmina VNC client. The dev container is set up to start a VNC server automatically.
+
+### Steps to Connect with Remmina
+
+1. **Forward the VNC port:**
+   - The VNC server runs on port `5900` inside the container.
+   - If using VS Code Remote Containers, forward port `5900` to your host machine.
+
+2. **Open Remmina:**
+   - Launch Remmina on your host system.
+
+3. **Create a new VNC connection:**
+   - Set the protocol to **VNC**.
+   - Set the server address to `localhost:5900` (or the forwarded port).
+   - Set the password to `android` (or as specified in your container setup).
+
+4. **Connect:**
+   - Click "Connect" in Remmina.
+   - You should see the Android emulator’s display. For the headless LEDFlash app, there may be no UI, but you can confirm the emulator is running.
+
+> **Note:** VNC access is optional for headless operation, but useful for troubleshooting emulator startup or for running apps with a UI.
+
 ## Notes
 
 - The emulator is started automatically by the dev container (via startup script or Dockerfile). Do **not** start it manually unless you have stopped it.
@@ -82,5 +106,3 @@ We chose a headless (no-GUI) Android app for this testbench because:
   ```bash
   ./gradlew assembleDebug --stacktrace
   ```
-
----
