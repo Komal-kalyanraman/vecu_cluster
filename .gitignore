@@ -61,6 +61,15 @@ android/apps/ledflash/app/.externalNativeBuild/
 android/apps/ledflash/app/.idea/
 android/apps/ledflash/app/.DS_Store
 
+# SpeedReceiver app (ignore build and gradle artifacts)
+android/apps/speedreceiver/app/build/
+android/apps/speedreceiver/.gradle/
+android/apps/speedreceiver/build/
+android/apps/speedreceiver/app/.cxx/
+android/apps/speedreceiver/app/.externalNativeBuild/
+android/apps/speedreceiver/app/.idea/
+android/apps/speedreceiver/app/.DS_Store
+
 # === Android Studio ===
 *.hprof
 
