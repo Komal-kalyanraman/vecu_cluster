@@ -1,10 +1,13 @@
 {
     "name": "FreeRTOS Dev Container",
-    "dockerFile": "Dockerfile",
+    "dockerFile": "../Dockerfile",
     "workspaceFolder": "/workspace",
     "mounts": [
         "source=${localWorkspaceFolder}/src,target=/workspace/src,type=bind",
-        "source=${localWorkspaceFolder}/tasks,target=/workspace/tasks,type=bind"
+        "source=${localWorkspaceFolder}/tasks,target=/workspace/tasks,type=bind",
+        "source=${localWorkspaceFolder}/freertos,target=/workspace/freertos,type=bind",
+        "source=${localWorkspaceFolder}/FreeRTOSConfig.h,target=/workspace/FreeRTOSConfig.h,type=bind",
+        "source=${localWorkspaceFolder}/CMakeLists.txt,target=/workspace/CMakeLists.txt,type=bind"
     ],
-    "remoteUser": "vscode"
+    "remoteUser": "root"
 }

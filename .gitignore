@@ -43,8 +43,6 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 Makefile
-build/
-**/build/
 !android/apps/ledflash/gradle/wrapper/gradle-wrapper.jar
 
 # === Android/Gradle ===
@@ -67,13 +65,53 @@ android/apps/ledflash/app/.DS_Store
 *.hprof
 
 # === FreeRTOS/Embedded ===
-freertos/build/
+freertos/build/*
+!freertos/build/.keep
 freertos/.vscode/
 freertos/.cproject
 freertos/.project
 freertos/.settings/
 freertos/.metadata/
 freertos/.idea/
+freertos/CMakeFiles/
+freertos/CMakeCache.txt
+freertos/cmake_install.cmake
+freertos/Makefile
+
+# Ignore CMake and build artifacts anywhere in freertos/
+freertos/**/CMakeFiles/
+freertos/**/CMakeCache.txt
+freertos/**/cmake_install.cmake
+freertos/**/Makefile
+freertos/**/freertos_sim
+freertos/**/freertos_sim.exe
+freertos/**/freertos_sim.dir/
+freertos/**/CMakeTmp/
+freertos/**/CMakeDirectoryInformation.cmake
+freertos/**/progress.marks
+freertos/**/TargetDirectories.txt
+freertos/**/depend.make
+freertos/**/link.txt
+freertos/**/flags.make
+freertos/**/progress.make
+freertos/**/DependInfo.cmake
+freertos/**/cmake_clean.cmake
+freertos/**/depend.internal
+
+# Ignore object files and binaries
+freertos/**/*.o
+freertos/**/*.obj
+freertos/**/*.out
+freertos/**/*.a
+freertos/**/*.so
+freertos/**/*.exe
+
+# Ignore logs and temp files
+freertos/**/*.log
+freertos/**/*.tmp
+freertos/**/*.swp
+freertos/**/*.swo
+freertos/**/*~
 
 # === Ubuntu domain (if using CMake or Make) ===
 ubuntu/build/
