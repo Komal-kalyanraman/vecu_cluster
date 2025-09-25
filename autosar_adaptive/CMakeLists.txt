@@ -3,7 +3,11 @@ project(autosar_adaptive_demo)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(include ara/com tasks)
+include_directories(
+    include
+    ara/com
+    tasks
+)
 
 add_executable(autosar_adaptive_demo
     src/main.cpp

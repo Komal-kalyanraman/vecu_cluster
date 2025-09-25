@@ -122,6 +122,51 @@ freertos/**/*.swp
 freertos/**/*.swo
 freertos/**/*~
 
+# === Adaptive AUTOSAR ===
+autosar_adaptive/build/*
+!autosar_adaptive/build/.keep
+autosar_adaptive/.vscode/
+autosar_adaptive/.idea/
+autosar_adaptive/CMakeFiles/
+autosar_adaptive/CMakeCache.txt
+autosar_adaptive/cmake_install.cmake
+autosar_adaptive/Makefile
+
+# Ignore CMake and build artifacts anywhere in autosar_adaptive/
+autosar_adaptive/**/CMakeFiles/
+autosar_adaptive/**/CMakeCache.txt
+autosar_adaptive/**/cmake_install.cmake
+autosar_adaptive/**/Makefile
+autosar_adaptive/**/autosar_adaptive_demo
+autosar_adaptive/**/autosar_adaptive_demo.exe
+autosar_adaptive/**/autosar_adaptive_demo.dir/
+autosar_adaptive/**/CMakeTmp/
+autosar_adaptive/**/CMakeDirectoryInformation.cmake
+autosar_adaptive/**/progress.marks
+autosar_adaptive/**/TargetDirectories.txt
+autosar_adaptive/**/depend.make
+autosar_adaptive/**/link.txt
+autosar_adaptive/**/flags.make
+autosar_adaptive/**/progress.make
+autosar_adaptive/**/DependInfo.cmake
+autosar_adaptive/**/cmake_clean.cmake
+autosar_adaptive/**/depend.internal
+
+# Ignore object files and binaries
+autosar_adaptive/**/*.o
+autosar_adaptive/**/*.obj
+autosar_adaptive/**/*.out
+autosar_adaptive/**/*.a
+autosar_adaptive/**/*.so
+autosar_adaptive/**/*.exe
+
+# Ignore logs and temp files
+autosar_adaptive/**/*.log
+autosar_adaptive/**/*.tmp
+autosar_adaptive/**/*.swp
+autosar_adaptive/**/*.swo
+autosar_adaptive/**/*~
+
 # === Ubuntu domain (if using CMake or Make) ===
 ubuntu/build/
 ubuntu/.vscode/
